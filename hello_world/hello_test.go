@@ -2,30 +2,24 @@ package main
 
 import "testing"
 
-func TestHello2(t *testing.T) {
-	got := Hello("Gab")
-	want := "Hello, Gab"
-
-	if got != want {
-		t.Errorf("got %q want %q", got, want)
-	}
-}
-
 func TestHello1(t *testing.T) {
 	type args struct {
-		name string
+		name     string
+		language string
 	}
 	tests := []struct {
 		name string
 		args args
 		want string
 	}{
-		{name: "Empty", args: args{name: ""}, want: "Hello, World"},
-		{name: "Gab", args: args{name: "Gab"}, want: "Hello, Gab"},
+		{name: "Empty name & language", args: args{name: "", language: ""}, want: "Hello, World"},
+		{name: "Empty name & Spanish", args: args{name: "", language: "Spanish"}, want: "Hola, World"},
+		{name: "Elodie & Spanish", args: args{name: "Elodie", language: "Spanish"}, want: "Hola, Elodie"},
+		{name: "Gab & French", args: args{name: "Gab", language: "French"}, want: "Bonjour, Gab"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Hello(tt.args.name); got != tt.want {
+			if got := Hello(tt.args.name, tt.args.language); got != tt.want {
 				t.Errorf("Hello() = %v, want %v", got, tt.want)
 			}
 		})
