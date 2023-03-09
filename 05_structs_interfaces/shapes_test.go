@@ -18,8 +18,9 @@ func TestArea(t *testing.T) {
 		shape Shape
 		want  float64
 	}{
-		{"rectangles", Rectangle{12, 6}, 72},
-		{"circles", Circle{10}, 314.1592653589793},
+		{name: "rectangles", shape: Rectangle{12, 6}, want: 72},
+		{name: "circles", shape: Circle{10}, want: 314.1592653589793},
+		{name: "triangles", shape: Triangle{12, 6}, want: 36},
 	}
 
 	for _, tt := range areaTests {
@@ -27,7 +28,7 @@ func TestArea(t *testing.T) {
 			got := tt.shape.Area()
 
 			if got != tt.want {
-				t.Errorf("got %.2f want %.2f", got, tt.want)
+				t.Errorf("%#v got %.2f want %.2f", tt.shape, got, tt.want)
 			}
 		})
 	}
