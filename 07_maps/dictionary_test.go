@@ -1,6 +1,9 @@
 package _7_maps
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 var word = "test"
 var definition = "this is just a test"
@@ -70,6 +73,43 @@ func TestDelete(t *testing.T) {
 		dict := Dictionary{}
 		dict.Delete(word)
 	})
+}
+
+func ExampleDictionary() {
+	dict := Dictionary{}
+
+	_, err := dict.Search("capybara")
+	if err == ErrNotFound {
+		fmt.Println("Couldn't find word in dict.")
+	}
+
+	_ = dict.Add("capybara", "The capybara is a giant cavy rodent native to South America.")
+	fmt.Println(dict)
+
+	err = dict.Add("capybara", "again")
+	if err == ErrWordExists {
+		fmt.Println("Word already exists in dict")
+	}
+
+	res, _ := dict.Search("capybara")
+	fmt.Println(res)
+
+	err = dict.Update("cavy", "")
+	if err == ErrWordDoesNotExist {
+		fmt.Println("Word does not exist in dict")
+	}
+
+	_ = dict.Update("capybara", "new definition")
+	res, _ = dict.Search("capybara")
+	fmt.Println(res)
+
+	// Output:
+	// Couldn't find word in dict.
+	// map[capybara:The capybara is a giant cavy rodent native to South America.]
+	// Word already exists in dict
+	// The capybara is a giant cavy rodent native to South America.
+	// Word does not exist in dict
+	// new definition
 }
 
 func assertDefinition(tb testing.TB, dictionary Dictionary, word, want string) {
