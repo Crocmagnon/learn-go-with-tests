@@ -3,12 +3,21 @@ package _6_pointers_errors
 import "testing"
 
 func TestWallet(t *testing.T) {
-	wallet := Wallet{}
+	t.Run("deposit", func(t *testing.T) {
+		wallet := Wallet{}
+		wallet.Deposit(Bitcoin(10))
+		assertBalance(t, wallet, Bitcoin(10))
+	})
+	t.Run("withdraw", func(t *testing.T) {
+		wallet := Wallet{balance: Bitcoin(20)}
+		wallet.Withdraw(Bitcoin(10))
+		assertBalance(t, wallet, Bitcoin(10))
+	})
+}
 
-	wallet.Deposit(10)
-
+func assertBalance(t testing.TB, wallet Wallet, want Bitcoin) {
+	t.Helper()
 	got := wallet.Balance()
-	want := Bitcoin(10)
 
 	if got != want {
 		t.Errorf("got %s want %s", got, want)
