@@ -24,7 +24,7 @@ func (d Dictionary) Search(word string) (string, error) {
 	return definition, nil
 }
 
-// Add adds a word and its defintion to the dictionary,
+// Add adds a word and its definition to the dictionary,
 // returning ErrWordExists if the word already exists in the dictionary.
 // In this case, use Update.
 func (d Dictionary) Add(word, definition string) error {
