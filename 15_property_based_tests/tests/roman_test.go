@@ -7,47 +7,57 @@ import (
 )
 
 type testCase struct {
-	num  int
-	want string
+	num   int
+	roman string
 }
 
 var tests = []testCase{
-	{num: 1, want: "I"},
-	{num: 2, want: "II"},
-	{num: 3, want: "III"},
-	{num: 4, want: "IV"},
-	{num: 5, want: "V"},
-	{num: 6, want: "VI"},
-	{num: 7, want: "VII"},
-	{num: 8, want: "VIII"},
-	{num: 9, want: "IX"},
-	{num: 10, want: "X"},
-	{num: 14, want: "XIV"},
-	{num: 18, want: "XVIII"},
-	{num: 20, want: "XX"},
-	{num: 39, want: "XXXIX"},
-	{num: 40, want: "XL"},
-	{num: 47, want: "XLVII"},
-	{num: 49, want: "XLIX"},
-	{num: 50, want: "L"},
-	{num: 100, want: "C"},
-	{num: 90, want: "XC"},
-	{num: 400, want: "CD"},
-	{num: 500, want: "D"},
-	{num: 900, want: "CM"},
-	{num: 1000, want: "M"},
-	{num: 1984, want: "MCMLXXXIV"},
-	{num: 3999, want: "MMMCMXCIX"},
-	{num: 2014, want: "MMXIV"},
-	{num: 1006, want: "MVI"},
-	{num: 798, want: "DCCXCVIII"},
+	{num: 1, roman: "I"},
+	{num: 2, roman: "II"},
+	{num: 3, roman: "III"},
+	{num: 4, roman: "IV"},
+	{num: 5, roman: "V"},
+	{num: 6, roman: "VI"},
+	{num: 7, roman: "VII"},
+	{num: 8, roman: "VIII"},
+	{num: 9, roman: "IX"},
+	{num: 10, roman: "X"},
+	{num: 14, roman: "XIV"},
+	{num: 18, roman: "XVIII"},
+	{num: 20, roman: "XX"},
+	{num: 39, roman: "XXXIX"},
+	{num: 40, roman: "XL"},
+	{num: 47, roman: "XLVII"},
+	{num: 49, roman: "XLIX"},
+	{num: 50, roman: "L"},
+	{num: 100, roman: "C"},
+	{num: 90, roman: "XC"},
+	{num: 400, roman: "CD"},
+	{num: 500, roman: "D"},
+	{num: 900, roman: "CM"},
+	{num: 1000, roman: "M"},
+	{num: 1984, roman: "MCMLXXXIV"},
+	{num: 3999, roman: "MMMCMXCIX"},
+	{num: 2014, roman: "MMXIV"},
+	{num: 1006, roman: "MVI"},
+	{num: 798, roman: "DCCXCVIII"},
 }
 
 func TestConvertToRoman(t *testing.T) {
 	for _, tt := range tests {
-		t.Run(fmt.Sprintf("%d gets converted to %v", tt.num, tt.want), func(t *testing.T) {
-			if got := roman.ConvertToRoman(tt.num); got != tt.want {
-				t.Errorf("ConvertToRoman() = %v, want %v", got, tt.want)
+		t.Run(fmt.Sprintf("%v gets converted to %v", tt.num, tt.roman), func(t *testing.T) {
+			if got := roman.ConvertToRoman(tt.num); got != tt.roman {
+				t.Errorf("ConvertToRoman() = %v, want %v", got, tt.roman)
+			}
+		})
+	}
+}
+
+func TestConvertFromRoman(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%v gets converted to %v", tt.roman, tt.num), func(t *testing.T) {
+			if got := roman.ConvertFromRoman(tt.roman); got != tt.num {
+				t.Errorf("ConvertFromRoman() = %v, want %v", got, tt.num)
 			}
 		})
 	}
