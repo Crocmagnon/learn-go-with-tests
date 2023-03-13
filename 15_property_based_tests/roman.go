@@ -2,12 +2,12 @@ package roman
 
 import "strings"
 
-type Numeral struct {
+type numeral struct {
 	Value  int
 	Symbol string
 }
 
-var allRomanNumerals = []Numeral{
+var allRomanNumerals = []numeral{
 	{Value: 1000, Symbol: "M"},
 	{Value: 900, Symbol: "CM"},
 	{Value: 500, Symbol: "D"},
