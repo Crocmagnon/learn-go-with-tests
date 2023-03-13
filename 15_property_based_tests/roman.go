@@ -1,4 +1,4 @@
-package _5_property_based_tests
+package roman
 
 import "strings"
 
