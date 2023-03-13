@@ -47,7 +47,7 @@ var tests = []testCase{
 func TestConvertToRoman(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("%v gets converted to %v", tt.num, tt.roman), func(t *testing.T) {
-			if got := roman.ConvertToRoman(tt.num); got != tt.roman {
+			if got, _ := roman.ConvertToRoman(tt.num); got != tt.roman {
 				t.Errorf("ConvertToRoman() = %v, want %v", got, tt.roman)
 			}
 		})
@@ -66,11 +66,11 @@ func TestConvertFromRoman(t *testing.T) {
 
 func TestPropertiesOfConversion(t *testing.T) {
 	assertion := func(arabic uint16) bool {
-		if arabic > 3999 {
+		t.Log("testing", arabic)
+		romanResult, err := roman.ConvertToRoman(arabic)
+		if err == roman.ErrNumberTooLarge {
 			return true
 		}
-		t.Log("testing", arabic)
-		romanResult := roman.ConvertToRoman(arabic)
 		fromRoman := roman.ConvertFromRoman(romanResult)
 		return fromRoman == arabic
 	}

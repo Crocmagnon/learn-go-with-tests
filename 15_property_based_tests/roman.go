@@ -1,9 +1,18 @@
 package roman
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
-func ConvertToRoman(arabic uint16) string {
+var ErrNumberTooLarge = errors.New("number is too large")
+
+func ConvertToRoman(arabic uint16) (string, error) {
 	var result strings.Builder
+
+	if arabic > 3999 {
+		return "", ErrNumberTooLarge
+	}
 
 	for _, numeral := range allNumerals {
 		for arabic >= numeral.Value {
@@ -12,7 +21,7 @@ func ConvertToRoman(arabic uint16) string {
 		}
 	}
 
-	return result.String()
+	return result.String(), nil
 }
 
 func ConvertFromRoman(roman string) uint16 {
