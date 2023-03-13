@@ -4,10 +4,11 @@ import (
 	"fmt"
 	roman "learn-go-with-tests/15_property_based_tests"
 	"testing"
+	"testing/quick"
 )
 
 type testCase struct {
-	num   int
+	num   uint16
 	roman string
 }
 
@@ -60,5 +61,23 @@ func TestConvertFromRoman(t *testing.T) {
 				t.Errorf("ConvertFromRoman() = %v, want %v", got, tt.num)
 			}
 		})
+	}
+}
+
+func TestPropertiesOfConversion(t *testing.T) {
+	assertion := func(arabic uint16) bool {
+		if arabic > 3999 {
+			return true
+		}
+		t.Log("testing", arabic)
+		romanResult := roman.ConvertToRoman(arabic)
+		fromRoman := roman.ConvertFromRoman(romanResult)
+		return fromRoman == arabic
+	}
+
+	if err := quick.Check(assertion, &quick.Config{
+		MaxCount: 1000,
+	}); err != nil {
+		t.Error(err)
 	}
 }

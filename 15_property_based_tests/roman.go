@@ -2,7 +2,7 @@ package roman
 
 import "strings"
 
-func ConvertToRoman(arabic int) string {
+func ConvertToRoman(arabic uint16) string {
 	var result strings.Builder
 
 	for _, numeral := range allNumerals {
@@ -15,8 +15,8 @@ func ConvertToRoman(arabic int) string {
 	return result.String()
 }
 
-func ConvertFromRoman(roman string) int {
-	total := 0
+func ConvertFromRoman(roman string) uint16 {
+	var total uint16 = 0
 	for _, symbols := range windowedRoman(roman).Symbols() {
 		total += allNumerals.ValueOf(symbols...)
 	}
@@ -24,13 +24,13 @@ func ConvertFromRoman(roman string) int {
 }
 
 type numeral struct {
-	Value  int
+	Value  uint16
 	Symbol string
 }
 
 type numerals []numeral
 
-func (n numerals) ValueOf(symbols ...byte) int {
+func (n numerals) ValueOf(symbols ...byte) uint16 {
 	symbol := string(symbols)
 	for _, num := range n {
 		if num.Symbol == symbol {
