@@ -8,6 +8,7 @@ import (
 )
 
 const secondHandLength = 90
+const minuteHandLength = 80
 const clockCentreX = 150
 const clockCentreY = 150
 
@@ -21,6 +22,7 @@ func SVGWriter(w io.Writer, t time.Time) {
 	io.WriteString(w, svgStart)
 	io.WriteString(w, bezel)
 	secondHand(w, t)
+	minuteHand(w, t)
 	io.WriteString(w, svgEnd)
 }
 
@@ -30,6 +32,14 @@ func secondHand(w io.Writer, t time.Time) {
 	p = Point{p.X, -p.Y}                                      // flip
 	p = Point{p.X + clockCentreX, p.Y + clockCentreY}         // translate
 	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#f00;stroke-width:3px;"/>`, p.X, p.Y)
+}
+
+func minuteHand(w io.Writer, t time.Time) {
+	p := minuteHandPoint(t)
+	p = Point{p.X * minuteHandLength, p.Y * minuteHandLength} // scale
+	p = Point{p.X, -p.Y}                                      // flip
+	p = Point{p.X + clockCentreX, p.Y + clockCentreY}         // translate
+	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:3px;"/>`, p.X, p.Y)
 }
 
 const svgStart = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -49,7 +59,21 @@ func secondsInRadians(t time.Time) float64 {
 	return math.Pi / (30 / seconds)
 }
 
+func minutesInRadians(t time.Time) float64 {
+	minutes := float64(t.Minute())
+	return (secondsInRadians(t) / 60) + (math.Pi / (30 / minutes))
+}
+
+func angleToPoint(angle float64) Point {
+	return Point{math.Sin(angle), math.Cos(angle)}
+}
+
 func secondHandPoint(t time.Time) Point {
 	angle := secondsInRadians(t)
-	return Point{math.Sin(angle), math.Cos(angle)}
+	return angleToPoint(angle)
+}
+
+func minuteHandPoint(t time.Time) Point {
+	angle := minutesInRadians(t)
+	return angleToPoint(angle)
 }
