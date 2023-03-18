@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func TestSVGWriterSecondHand(t *testing.T) {
+func TestWriteSVGSecondHand(t *testing.T) {
 	cases := []struct {
 		time time.Time
 		line Line
@@ -19,7 +19,7 @@ func TestSVGWriterSecondHand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			b := bytes.Buffer{}
-			clockface.SVGWriter(&b, c.time)
+			clockface.WriteSVG(&b, c.time)
 
 			svg := SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)
@@ -31,7 +31,7 @@ func TestSVGWriterSecondHand(t *testing.T) {
 	}
 }
 
-func TestSVGWriterMinuteHand(t *testing.T) {
+func TestWriteSVGMinuteHand(t *testing.T) {
 	cases := []struct {
 		time time.Time
 		line Line
@@ -41,7 +41,7 @@ func TestSVGWriterMinuteHand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			b := bytes.Buffer{}
-			clockface.SVGWriter(&b, c.time)
+			clockface.WriteSVG(&b, c.time)
 
 			svg := SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)
@@ -53,7 +53,7 @@ func TestSVGWriterMinuteHand(t *testing.T) {
 	}
 }
 
-func TestSVGWriterHourHand(t *testing.T) {
+func TestWriteSVGHourHand(t *testing.T) {
 	cases := []struct {
 		time time.Time
 		line Line
@@ -63,7 +63,7 @@ func TestSVGWriterHourHand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			b := bytes.Buffer{}
-			clockface.SVGWriter(&b, c.time)
+			clockface.WriteSVG(&b, c.time)
 
 			svg := SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)

@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	if err := clockface.SVGWriter(os.Stdout, time.Now()); err != nil {
+	if err := clockface.WriteSVG(os.Stdout, time.Now()); err != nil {
 		msg := "There has been an error generating the clock:"
 		if _, perr := fmt.Fprintln(os.Stderr, msg); perr != nil {
 			panic(perr)

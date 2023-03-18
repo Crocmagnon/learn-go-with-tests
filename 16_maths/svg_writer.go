@@ -13,8 +13,8 @@ const hourHandLength = 50
 const clockCentreX = 150
 const clockCentreY = 150
 
-// SVGWriter writes an SVG representation of an analogue clock, showing the time t, to the writer w
-func SVGWriter(w io.Writer, t time.Time) error {
+// WriteSVG writes an SVG representation of an analogue clock, showing the time t, to the writer w
+func WriteSVG(w io.Writer, t time.Time) error {
 	b := bufio.NewWriter(w)
 	_, _ = b.WriteString(svgStart)
 	_, _ = b.WriteString(bezel)
