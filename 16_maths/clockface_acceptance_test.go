@@ -25,6 +25,7 @@ func TestWriteSVG(t *testing.T) {
 		}{
 			{simpleTime(0, 0, 0), Line{150, 150, 150, 60}},
 			{simpleTime(0, 0, 30), Line{150, 150, 150, 240}},
+			{simpleTime(6, 21, 48), Line{150, 150, 64.405, 122.188}},
 		}
 		for _, c := range cases {
 			t.Run(testName(c.time), func(t *testing.T) {
@@ -51,6 +52,7 @@ func TestWriteSVG(t *testing.T) {
 			line Line
 		}{
 			{simpleTime(0, 0, 0), Line{150, 150, 150, 80}},
+			{simpleTime(6, 21, 48), Line{150, 150, 202.99, 195.739}},
 		}
 		for _, c := range cases {
 			t.Run(testName(c.time), func(t *testing.T) {
@@ -77,6 +79,7 @@ func TestWriteSVG(t *testing.T) {
 			line Line
 		}{
 			{simpleTime(6, 0, 0), Line{150, 150, 150, 200}},
+			{simpleTime(6, 21, 48), Line{150, 150, 140.545, 199.098}},
 		}
 		for _, c := range cases {
 			t.Run(testName(c.time), func(t *testing.T) {
