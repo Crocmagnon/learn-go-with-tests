@@ -17,92 +17,92 @@ func TestWriteSVG(t *testing.T) {
 			t.Error("didn't get an error, expected one")
 		}
 	})
+
+	t.Run("second hand", func(t *testing.T) {
+		cases := []struct {
+			time time.Time
+			line Line
+		}{
+			{simpleTime(0, 0, 0), Line{150, 150, 150, 60}},
+			{simpleTime(0, 0, 30), Line{150, 150, 150, 240}},
+		}
+		for _, c := range cases {
+			t.Run(testName(c.time), func(t *testing.T) {
+				b := bytes.Buffer{}
+				if err := clockface.WriteSVG(&b, c.time); err != nil {
+					t.Fatalf("got an error: %q, didn't expect one", err)
+				}
+
+				svg := SVG{}
+				if err := xml.Unmarshal(b.Bytes(), &svg); err != nil {
+					t.Fatalf("error during xml parsing: %q", err)
+				}
+
+				if !containsLine(c.line, svg.Line) {
+					t.Errorf("Expected to find the second hand line %+v in the SVG lines %+v", c.line, svg.Line)
+				}
+			})
+		}
+	})
+
+	t.Run("minute hand", func(t *testing.T) {
+		cases := []struct {
+			time time.Time
+			line Line
+		}{
+			{simpleTime(0, 0, 0), Line{150, 150, 150, 80}},
+		}
+		for _, c := range cases {
+			t.Run(testName(c.time), func(t *testing.T) {
+				b := bytes.Buffer{}
+				if err := clockface.WriteSVG(&b, c.time); err != nil {
+					t.Fatalf("got an error: %q, didn't expect one", err)
+				}
+
+				svg := SVG{}
+				if err := xml.Unmarshal(b.Bytes(), &svg); err != nil {
+					t.Fatalf("error during xml parsing: %q", err)
+				}
+
+				if !containsLine(c.line, svg.Line) {
+					t.Errorf("Expected to find the minute hand line %+v in the SVG lines %+v", c.line, svg.Line)
+				}
+			})
+		}
+	})
+
+	t.Run("hour hand", func(t *testing.T) {
+		cases := []struct {
+			time time.Time
+			line Line
+		}{
+			{simpleTime(6, 0, 0), Line{150, 150, 150, 200}},
+		}
+		for _, c := range cases {
+			t.Run(testName(c.time), func(t *testing.T) {
+				b := bytes.Buffer{}
+				if err := clockface.WriteSVG(&b, c.time); err != nil {
+					t.Fatalf("got an error: %q, didn't expect one", err)
+				}
+
+				svg := SVG{}
+				if err := xml.Unmarshal(b.Bytes(), &svg); err != nil {
+					t.Fatalf("error during xml parsing: %q", err)
+				}
+
+				if !containsLine(c.line, svg.Line) {
+					t.Errorf("Expected to find the minute hand line %+v in the SVG lines %+v", c.line, svg.Line)
+				}
+			})
+		}
+	})
 }
 
 type badWriter struct {
 }
 
-func (b badWriter) Write(p []byte) (n int, err error) {
+func (b badWriter) Write(_ []byte) (n int, err error) {
 	return 0, errors.New("unexpected error during write")
-}
-
-func TestWriteSVGSecondHand(t *testing.T) {
-	cases := []struct {
-		time time.Time
-		line Line
-	}{
-		{simpleTime(0, 0, 0), Line{150, 150, 150, 60}},
-		{simpleTime(0, 0, 30), Line{150, 150, 150, 240}},
-	}
-	for _, c := range cases {
-		t.Run(testName(c.time), func(t *testing.T) {
-			b := bytes.Buffer{}
-			if err := clockface.WriteSVG(&b, c.time); err != nil {
-				t.Fatalf("got an error: %q, didn't expect one", err)
-			}
-
-			svg := SVG{}
-			if err := xml.Unmarshal(b.Bytes(), &svg); err != nil {
-				t.Fatalf("error during xml parsing: %q", err)
-			}
-
-			if !containsLine(c.line, svg.Line) {
-				t.Errorf("Expected to find the second hand line %+v in the SVG lines %+v", c.line, svg.Line)
-			}
-		})
-	}
-}
-
-func TestWriteSVGMinuteHand(t *testing.T) {
-	cases := []struct {
-		time time.Time
-		line Line
-	}{
-		{simpleTime(0, 0, 0), Line{150, 150, 150, 80}},
-	}
-	for _, c := range cases {
-		t.Run(testName(c.time), func(t *testing.T) {
-			b := bytes.Buffer{}
-			if err := clockface.WriteSVG(&b, c.time); err != nil {
-				t.Fatalf("got an error: %q, didn't expect one", err)
-			}
-
-			svg := SVG{}
-			if err := xml.Unmarshal(b.Bytes(), &svg); err != nil {
-				t.Fatalf("error during xml parsing: %q", err)
-			}
-
-			if !containsLine(c.line, svg.Line) {
-				t.Errorf("Expected to find the minute hand line %+v in the SVG lines %+v", c.line, svg.Line)
-			}
-		})
-	}
-}
-
-func TestWriteSVGHourHand(t *testing.T) {
-	cases := []struct {
-		time time.Time
-		line Line
-	}{
-		{simpleTime(6, 0, 0), Line{150, 150, 150, 200}},
-	}
-	for _, c := range cases {
-		t.Run(testName(c.time), func(t *testing.T) {
-			b := bytes.Buffer{}
-			if err := clockface.WriteSVG(&b, c.time); err != nil {
-				t.Fatalf("got an error: %q, didn't expect one", err)
-			}
-
-			svg := SVG{}
-			if err := xml.Unmarshal(b.Bytes(), &svg); err != nil {
-				t.Fatalf("error during xml parsing: %q", err)
-			}
-
-			if !containsLine(c.line, svg.Line) {
-				t.Errorf("Expected to find the minute hand line %+v in the SVG lines %+v", c.line, svg.Line)
-			}
-		})
-	}
 }
 
 func containsLine(want Line, lines []Line) bool {
