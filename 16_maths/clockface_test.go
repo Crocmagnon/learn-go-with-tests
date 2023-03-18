@@ -74,17 +74,17 @@ func TestHoursInRadians(t *testing.T) {
 func TestSecondHandPoint(t *testing.T) {
 	cases := []struct {
 		time  time.Time
-		point Point
+		point point
 	}{
-		{simpleTime(0, 0, 30), Point{0, -1}},
-		{simpleTime(0, 0, 0), Point{0, 1}},
-		{simpleTime(0, 0, 45), Point{-1, 0}},
+		{simpleTime(0, 0, 30), point{0, -1}},
+		{simpleTime(0, 0, 0), point{0, 1}},
+		{simpleTime(0, 0, 45), point{-1, 0}},
 	}
 	for _, test := range cases {
 		t.Run(testName(test.time), func(t *testing.T) {
 			got := secondHandPoint(test.time)
 			if !roughlyEqualPoint(got, test.point) {
-				t.Fatalf("Wanted %v Point, got %v", test.point, got)
+				t.Fatalf("Wanted %v point, got %v", test.point, got)
 			}
 		})
 	}
@@ -93,17 +93,17 @@ func TestSecondHandPoint(t *testing.T) {
 func TestMinuteHandPoint(t *testing.T) {
 	cases := []struct {
 		time  time.Time
-		point Point
+		point point
 	}{
-		{simpleTime(0, 30, 0), Point{0, -1}},
-		{simpleTime(0, 0, 0), Point{0, 1}},
-		{simpleTime(0, 45, 0), Point{-1, 0}},
+		{simpleTime(0, 30, 0), point{0, -1}},
+		{simpleTime(0, 0, 0), point{0, 1}},
+		{simpleTime(0, 45, 0), point{-1, 0}},
 	}
 	for _, test := range cases {
 		t.Run(testName(test.time), func(t *testing.T) {
 			got := minuteHandPoint(test.time)
 			if !roughlyEqualPoint(got, test.point) {
-				t.Fatalf("Wanted %v Point, got %v", test.point, got)
+				t.Fatalf("Wanted %v point, got %v", test.point, got)
 			}
 		})
 	}
@@ -112,22 +112,22 @@ func TestMinuteHandPoint(t *testing.T) {
 func TestHourHandPoint(t *testing.T) {
 	cases := []struct {
 		time  time.Time
-		point Point
+		point point
 	}{
-		{simpleTime(6, 0, 0), Point{0, -1}},
-		{simpleTime(21, 0, 0), Point{-1, 0}},
+		{simpleTime(6, 0, 0), point{0, -1}},
+		{simpleTime(21, 0, 0), point{-1, 0}},
 	}
 	for _, test := range cases {
 		t.Run(testName(test.time), func(t *testing.T) {
 			got := hourHandPoint(test.time)
 			if !roughlyEqualPoint(got, test.point) {
-				t.Fatalf("Wanted %v Point, got %v", test.point, got)
+				t.Fatalf("Wanted %v point, got %v", test.point, got)
 			}
 		})
 	}
 }
 
-func roughlyEqualPoint(a, b Point) bool {
+func roughlyEqualPoint(a, b point) bool {
 	return roughlyEqualFloat64(a.X, b.X) &&
 		roughlyEqualFloat64(a.Y, b.Y)
 }

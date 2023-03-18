@@ -46,10 +46,10 @@ func makeHourHand(t time.Time) string {
 	return s
 }
 
-func makeHandPoint(p Point, length float64) Point {
-	p = Point{p.X * length, p.Y * length}
-	p = Point{p.X, -p.Y}
-	p = Point{p.X + clockCentreX, p.Y + clockCentreY}
+func makeHandPoint(p point, length float64) point {
+	p = point{p.X * length, p.Y * length}
+	p = point{p.X, -p.Y}
+	p = point{p.X + clockCentreX, p.Y + clockCentreY}
 	return p
 }
 

@@ -14,8 +14,8 @@ const (
 	hoursInClock       = 2 * hoursInHalfClock
 )
 
-// A Point represents a two-dimensional cartesian coordinate
-type Point struct {
+// A point represents a two-dimensional cartesian coordinate
+type point struct {
 	X, Y float64
 }
 
@@ -34,21 +34,21 @@ func hoursInRadians(t time.Time) float64 {
 	return (minutesInRadians(t) / hoursInClock) + (math.Pi / (hoursInHalfClock / hours))
 }
 
-func angleToPoint(angle float64) Point {
-	return Point{math.Sin(angle), math.Cos(angle)}
+func angleToPoint(angle float64) point {
+	return point{math.Sin(angle), math.Cos(angle)}
 }
 
-func secondHandPoint(t time.Time) Point {
+func secondHandPoint(t time.Time) point {
 	angle := secondsInRadians(t)
 	return angleToPoint(angle)
 }
 
-func minuteHandPoint(t time.Time) Point {
+func minuteHandPoint(t time.Time) point {
 	angle := minutesInRadians(t)
 	return angleToPoint(angle)
 }
 
-func hourHandPoint(t time.Time) Point {
+func hourHandPoint(t time.Time) point {
 	angle := hoursInRadians(t)
 	return angleToPoint(angle)
 }
