@@ -2,6 +2,7 @@ package templating_test
 
 import (
 	"bytes"
+	"github.com/approvals/go-approval-tests"
 	templating "learn-go-with-tests/18_templating"
 	"testing"
 )
@@ -16,18 +17,11 @@ func TestRender(t *testing.T) {
 
 	t.Run("convert a single post to HTML", func(t *testing.T) {
 		buf := bytes.Buffer{}
-		err := templating.Render(&buf, post)
 
-		if err != nil {
+		if err := templating.Render(&buf, post); err != nil {
 			t.Fatal(err)
 		}
 
-		got := buf.String()
-		want := `<h1>Hello, world</h1>
-<p>This is a description</p>
-Tags: <ul><li>go</li><li>tdd</li></ul>`
-		if got != want {
-			t.Errorf("got %q, want %q", got, want)
-		}
+		approvals.VerifyString(t, buf.String())
 	})
 }
