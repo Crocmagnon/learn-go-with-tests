@@ -1,6 +1,7 @@
 package clockface
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"time"
@@ -14,61 +15,38 @@ const clockCentreY = 150
 
 // SVGWriter writes an SVG representation of an analogue clock, showing the time t, to the writer w
 func SVGWriter(w io.Writer, t time.Time) error {
-	_, err := io.WriteString(w, svgStart)
-	if err != nil {
-		return err
-	}
-	_, err = io.WriteString(w, bezel)
-	if err != nil {
-		return err
-	}
-	err = hourHand(w, t)
-	if err != nil {
-		return err
-	}
-	err = minuteHand(w, t)
-	if err != nil {
-		return err
-	}
-	err = secondHand(w, t)
-	if err != nil {
-		return err
-	}
-	_, err = io.WriteString(w, svgEnd)
-	if err != nil {
+	b := bufio.NewWriter(w)
+	_, _ = b.WriteString(svgStart)
+	_, _ = b.WriteString(bezel)
+	_, _ = b.WriteString(makeHourHand(t))
+	_, _ = b.WriteString(makeMinuteHand(t))
+	_, _ = b.WriteString(makeSecondHand(t))
+	_, _ = b.WriteString(svgEnd)
+	if err := b.Flush(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func secondHand(w io.Writer, t time.Time) error {
-	p := makeHand(secondHandPoint(t), secondHandLength)
-	_, err := fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#f00;stroke-width:3px;"/>`, p.X, p.Y)
-	if err != nil {
-		return err
-	}
-	return nil
+func makeSecondHand(t time.Time) string {
+	p := makeHandPoint(secondHandPoint(t), secondHandLength)
+	s := fmt.Sprintf(`<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#f00;stroke-width:3px;"/>`, p.X, p.Y)
+	return s
 }
 
-func minuteHand(w io.Writer, t time.Time) error {
-	p := makeHand(minuteHandPoint(t), minuteHandLength)
-	_, err := fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#888;stroke-width:3px;"/>`, p.X, p.Y)
-	if err != nil {
-		return err
-	}
-	return nil
+func makeMinuteHand(t time.Time) string {
+	p := makeHandPoint(minuteHandPoint(t), minuteHandLength)
+	s := fmt.Sprintf(`<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#888;stroke-width:3px;"/>`, p.X, p.Y)
+	return s
 }
 
-func hourHand(w io.Writer, t time.Time) error {
-	p := makeHand(hourHandPoint(t), hourHandLength)
-	_, err := fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:5px;"/>`, p.X, p.Y)
-	if err != nil {
-		return err
-	}
-	return nil
+func makeHourHand(t time.Time) string {
+	p := makeHandPoint(hourHandPoint(t), hourHandLength)
+	s := fmt.Sprintf(`<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:5px;"/>`, p.X, p.Y)
+	return s
 }
 
-func makeHand(p Point, length float64) Point {
+func makeHandPoint(p Point, length float64) Point {
 	p = Point{p.X * length, p.Y * length}
 	p = Point{p.X, -p.Y}
 	p = Point{p.X + clockCentreX, p.Y + clockCentreY}
