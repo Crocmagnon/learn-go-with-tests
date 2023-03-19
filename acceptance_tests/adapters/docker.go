@@ -11,13 +11,21 @@ import (
 	"time"
 )
 
-func StartDockerServer(t testing.TB, dockerfilePath string, port string) {
+func StartDockerServer(
+	t testing.TB,
+	dockerfilePath string,
+	port string,
+	binToBuild string,
+) {
 	t.Helper()
 	ctx := context.Background()
 	req := testcontainers.ContainerRequest{
 		FromDockerfile: testcontainers.FromDockerfile{
-			Context:       "../../../.",
-			Dockerfile:    dockerfilePath,
+			Context:    "../../../.",
+			Dockerfile: dockerfilePath,
+			BuildArgs: map[string]*string{
+				"binToBuild": &binToBuild,
+			},
 			PrintBuildLog: true,
 		},
 		ExposedPorts: []string{fmt.Sprintf("%s:%s", port, port)},

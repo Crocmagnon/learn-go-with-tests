@@ -6,7 +6,9 @@ RUN go mod download
 
 COPY acceptance_tests/ ./acceptance_tests/
 
-RUN go build -o svr acceptance_tests/cmd/httpserver/*.go
+ARG binToBuild
+
+RUN go build -o svr acceptance_tests/cmd/${binToBuild}/*.go
 
 EXPOSE 8080
 CMD ["./svr"]
