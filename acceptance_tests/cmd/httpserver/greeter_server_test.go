@@ -13,7 +13,7 @@ import (
 func TestGreeterServer(t *testing.T) {
 	var (
 		port           = "8080"
-		dockerfilePath = "./acceptance_tests/Dockerfile"
+		dockerfilePath = "./acceptance_tests/cmd/httpserver/Dockerfile"
 		baseURL        = fmt.Sprintf("http://127.0.0.1:%s", port)
 		client         = http.Client{Timeout: 1 * time.Second}
 		driver         = httpserver.Driver{BaseURL: baseURL, Client: &client}
