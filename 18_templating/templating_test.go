@@ -36,6 +36,17 @@ func TestRender(t *testing.T) {
 
 		approvals.VerifyString(t, buf.String())
 	})
+
+	t.Run("render an index", func(t *testing.T) {
+		buf := bytes.Buffer{}
+
+		posts := []templating.Post{post, {Title: "Some other post"}}
+		if err = renderer.RenderIndex(&buf, posts); err != nil {
+			t.Fatal(err)
+		}
+
+		approvals.VerifyString(t, buf.String())
+	})
 }
 
 func BenchmarkRender(b *testing.B) {

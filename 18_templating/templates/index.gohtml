@@ -1,0 +1,9 @@
+{{ template "top" . }}
+<h1>Index</h1>
+<ol>
+    {{- range . }}
+        <li><a href="/post/{{.SlugTitle}}">{{.Title}}</a></li>
+    {{- end }}
+</ol>
+
+{{ template "bottom" . }}

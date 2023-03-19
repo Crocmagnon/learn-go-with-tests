@@ -7,6 +7,8 @@ import (
 	"github.com/gomarkdown/markdown/parser"
 	"html/template"
 	"io"
+	"regexp"
+	"strings"
 )
 
 var (
@@ -38,6 +40,12 @@ func (p Post) RenderBody() template.HTML {
 	return template.HTML(string(rendered))
 }
 
+func (p Post) SlugTitle() string {
+	title := strings.ToLower(strings.ReplaceAll(p.Title, " ", "-"))
+	nonSlug := regexp.MustCompile("[^a-z-_]")
+	return nonSlug.ReplaceAllString(title, "-")
+}
+
 type PostRenderer struct {
 	templ *template.Template
 }
@@ -51,8 +59,9 @@ func NewPostRenderer() (*PostRenderer, error) {
 }
 
 func (r *PostRenderer) Render(w io.Writer, p Post) error {
-	if err := r.templ.Execute(w, p); err != nil {
-		return err
-	}
-	return nil
+	return r.templ.ExecuteTemplate(w, "blog.gohtml", p)
+}
+
+func (r *PostRenderer) RenderIndex(w io.Writer, posts []Post) error {
+	return r.templ.ExecuteTemplate(w, "index.gohtml", posts)
 }
