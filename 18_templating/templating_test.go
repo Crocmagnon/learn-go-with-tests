@@ -9,9 +9,15 @@ import (
 )
 
 func TestRender(t *testing.T) {
+	postBody := `This is a post
+
+* With a list
+* Some *item*
+
+**other [link](#toto)**.`
 	post := templating.Post{
 		Title:       "Hello, world",
-		Body:        "This is a post",
+		Body:        postBody,
 		Description: "This is a description",
 		Tags:        []string{"go", "tdd"},
 	}
@@ -33,9 +39,15 @@ func TestRender(t *testing.T) {
 }
 
 func BenchmarkRender(b *testing.B) {
+	postBody := `This is a post
+
+* With a list
+* Some *item*
+
+**other [link](#toto)**.`
 	post := templating.Post{
 		Title:       "Hello, world",
-		Body:        "This is a post",
+		Body:        postBody,
 		Description: "This is a description",
 		Tags:        []string{"go", "tdd"},
 	}

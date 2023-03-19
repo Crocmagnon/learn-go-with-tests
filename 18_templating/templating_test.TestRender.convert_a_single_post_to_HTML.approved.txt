@@ -27,6 +27,16 @@ Tags:
         <li>tdd</li>
 </ul>
 
+<p>This is a post</p>
+
+<ul>
+<li>With a list</li>
+<li>Some <em>item</em></li>
+</ul>
+
+<p><strong>other <a href="#toto">link</a></strong>.</p>
+
+
 </main>
 <footer>
     <ul>
