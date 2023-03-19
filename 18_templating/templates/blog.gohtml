@@ -1,14 +1,14 @@
 {{ template "top" . }}
-<h1>{{.Title}}</h1>
-<p>{{.Description}}</p>
+<h1>{{.RawPost.Title}}</h1>
+<p>{{.RawPost.Description}}</p>
 
 Tags:
 <ul>
-    {{- range .Tags}}
+    {{- range .RawPost.Tags}}
         <li>{{.}}</li>
     {{- end}}
 </ul>
 
-{{ .RenderBody }}
+{{ .Body }}
 
 {{ template "bottom" . }}

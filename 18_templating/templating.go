@@ -22,22 +22,6 @@ type Post struct {
 	Tags        []string
 }
 
-func (p Post) RenderBody() template.HTML {
-	md := []byte(p.Body)
-	md = markdown.NormalizeNewlines(md)
-
-	extensions := parser.CommonExtensions
-	markdownParser := parser.NewWithExtensions(extensions)
-
-	return template.HTML(markdown.ToHTML(md, markdownParser, nil))
-}
-
-func (p Post) SlugTitle() string {
-	title := strings.ToLower(strings.ReplaceAll(p.Title, " ", "-"))
-	nonSlug := regexp.MustCompile("[^a-z-_]")
-	return nonSlug.ReplaceAllString(title, "-")
-}
-
 type PostRenderer struct {
 	templ *template.Template
 }
@@ -47,13 +31,48 @@ func NewPostRenderer() (*PostRenderer, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return &PostRenderer{templ: templ}, nil
 }
 
 func (r *PostRenderer) Render(w io.Writer, p Post) error {
-	return r.templ.ExecuteTemplate(w, "blog.gohtml", p)
+	return r.templ.ExecuteTemplate(w, "blog.gohtml", newRenderedPost(p))
 }
 
 func (r *PostRenderer) RenderIndex(w io.Writer, posts []Post) error {
-	return r.templ.ExecuteTemplate(w, "index.gohtml", posts)
+	return r.templ.ExecuteTemplate(w, "index.gohtml", newRenderedPosts(posts))
+}
+
+type renderedPost struct {
+	Body      template.HTML
+	SlugTitle string
+	RawPost   Post
+}
+
+func newRenderedPost(post Post) renderedPost {
+	md := []byte(post.Body)
+	md = markdown.NormalizeNewlines(md)
+
+	extensions := parser.CommonExtensions
+	// The parser must not be reused, or it can cause a panic
+	// see https://github.com/gomarkdown/markdown/issues/229
+	p := parser.NewWithExtensions(extensions)
+
+	html := markdown.ToHTML(md, p, nil)
+	body := template.HTML(html)
+
+	title := strings.ToLower(strings.ReplaceAll(post.Title, " ", "-"))
+	nonSlug := regexp.MustCompile("[^a-z-_]")
+	title = nonSlug.ReplaceAllString(title, "-")
+
+	return renderedPost{Body: body, RawPost: post, SlugTitle: title}
+}
+
+func newRenderedPosts(posts []Post) []renderedPost {
+	var rendered []renderedPost
+	for _, post := range posts {
+		r := newRenderedPost(post)
+		rendered = append(rendered, r)
+	}
+	return rendered
 }

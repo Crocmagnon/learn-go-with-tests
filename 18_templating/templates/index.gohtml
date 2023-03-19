@@ -2,7 +2,7 @@
 <h1>Index</h1>
 <ol>
     {{- range . }}
-        <li><a href="/post/{{.SlugTitle}}">{{.Title}}</a></li>
+        <li><a href="/post/{{.SlugTitle}}">{{.RawPost.Title}}</a></li>
     {{- end }}
 </ol>
 
