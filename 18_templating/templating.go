@@ -3,7 +3,6 @@ package templating
 import (
 	"embed"
 	"github.com/gomarkdown/markdown"
-	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
 	"html/template"
 	"io"
@@ -30,14 +29,7 @@ func (p Post) RenderBody() template.HTML {
 	extensions := parser.CommonExtensions
 	markdownParser := parser.NewWithExtensions(extensions)
 
-	doc := markdownParser.Parse(md)
-
-	flags := html.CommonFlags
-	opts := html.RendererOptions{Flags: flags}
-	renderer := html.NewRenderer(opts)
-
-	rendered := markdown.Render(doc, renderer)
-	return template.HTML(string(rendered))
+	return template.HTML(markdown.ToHTML(md, markdownParser, nil))
 }
 
 func (p Post) SlugTitle() string {
