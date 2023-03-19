@@ -1,13 +1,13 @@
 package main
 
 import (
-	go_specs_greet "github.com/Crocmagnon/learn-go-with-tests/acceptance_tests"
+	"github.com/Crocmagnon/learn-go-with-tests/acceptance_tests/adapters/httpserver"
 	"log"
 	"net/http"
 )
 
 func main() {
-	handler := http.HandlerFunc(go_specs_greet.Handler)
+	handler := http.HandlerFunc(httpserver.Handler)
 	if err := http.ListenAndServe(":8080", handler); err != nil {
 		log.Fatal(err)
 	}

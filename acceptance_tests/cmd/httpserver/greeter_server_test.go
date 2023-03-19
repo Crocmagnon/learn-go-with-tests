@@ -2,7 +2,7 @@ package main_test
 
 import (
 	"context"
-	go_specs_greet "github.com/Crocmagnon/learn-go-with-tests/acceptance_tests"
+	"github.com/Crocmagnon/learn-go-with-tests/acceptance_tests/adapters/httpserver"
 	"github.com/Crocmagnon/learn-go-with-tests/acceptance_tests/specifications"
 	"github.com/alecthomas/assert/v2"
 	"github.com/testcontainers/testcontainers-go"
@@ -17,7 +17,7 @@ func TestGreeterServer(t *testing.T) {
 	req := testcontainers.ContainerRequest{
 		FromDockerfile: testcontainers.FromDockerfile{
 			Context:       "../../../.",
-			Dockerfile:    "./acceptance_tests/cmd/httpserver/Dockerfile",
+			Dockerfile:    "./acceptance_tests/Dockerfile",
 			PrintBuildLog: true,
 		},
 		ExposedPorts: []string{"8080:8080"},
@@ -36,6 +36,6 @@ func TestGreeterServer(t *testing.T) {
 		Timeout: 1 * time.Second,
 	}
 
-	driver := go_specs_greet.Driver{BaseURL: "http://127.0.0.1:8080", Client: &client}
+	driver := httpserver.Driver{BaseURL: "http://127.0.0.1:8080", Client: &client}
 	specifications.GreetSpecification(t, driver)
 }
