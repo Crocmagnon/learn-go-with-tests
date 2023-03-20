@@ -2,6 +2,19 @@ package _5_structs_interfaces
 
 import "math"
 
+type Shape interface {
+	Area() float64
+	Perimeter() float64
+}
+
+type Areable interface {
+	Area() float64
+}
+
+type Perimeterable interface {
+	Perimeter() float64
+}
+
 type Rectangle struct {
 	Width  float64
 	Height float64
@@ -32,15 +45,17 @@ type Triangle struct {
 	Height float64
 }
 
-func (t Triangle) Perimeter() float64 {
-	panic("not implemented")
-}
-
 func (t Triangle) Area() float64 {
 	return t.Base * t.Height / 2
 }
 
-type Shape interface {
-	Area() float64
-	Perimeter() float64
+type Answer struct {
+}
+
+func (a Answer) Perimeter() float64 {
+	return 42
+}
+
+func (a Answer) Area() float64 {
+	return 42
 }
