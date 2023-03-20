@@ -16,7 +16,8 @@ func StartDockerServer(
 	dockerfilePath string,
 	port string,
 	binToBuild string,
-) {
+	proto string,
+) string {
 	t.Helper()
 	ctx := context.Background()
 	req := testcontainers.ContainerRequest{
@@ -28,7 +29,7 @@ func StartDockerServer(
 			},
 			PrintBuildLog: true,
 		},
-		ExposedPorts: []string{fmt.Sprintf("%s:%s", port, port)},
+		ExposedPorts: []string{fmt.Sprintf("%s", port)},
 		WaitingFor:   wait.ForListeningPort(nat.Port(port)).WithStartupTimeout(5 * time.Second),
 	}
 	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
@@ -39,4 +40,8 @@ func StartDockerServer(
 	t.Cleanup(func() {
 		assert.NoError(t, container.Terminate(ctx))
 	})
+
+	endpoint, err := container.PortEndpoint(ctx, nat.Port(port), proto)
+	assert.NoError(t, err)
+	return endpoint
 }

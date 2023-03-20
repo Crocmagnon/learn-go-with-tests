@@ -1,7 +1,6 @@
 package main_test
 
 import (
-	"fmt"
 	"github.com/Crocmagnon/learn-go-with-tests/acceptance_tests/adapters"
 	"github.com/Crocmagnon/learn-go-with-tests/acceptance_tests/adapters/grpcserver"
 	"github.com/Crocmagnon/learn-go-with-tests/acceptance_tests/specifications"
@@ -12,15 +11,16 @@ func TestGreeterServer(t *testing.T) {
 	if testing.Short() {
 		t.Skip()
 	}
+	t.Parallel()
 
 	var (
 		port           = "50051"
 		dockerfilePath = "./acceptance_tests/Dockerfile"
-		driver         = grpcserver.Driver{Addr: fmt.Sprintf("localhost:%s", port)}
+		endpoint       = adapters.StartDockerServer(t, dockerfilePath, port, "grpcserver", "")
+		driver         = grpcserver.Driver{Addr: endpoint}
 	)
 
 	t.Cleanup(driver.Close)
-	adapters.StartDockerServer(t, dockerfilePath, port, "grpcserver")
 	specifications.GreetSpecification(t, &driver)
 	specifications.CurseSpecification(t, &driver)
 }

@@ -1,7 +1,6 @@
 package main_test
 
 import (
-	"fmt"
 	"github.com/Crocmagnon/learn-go-with-tests/acceptance_tests/adapters"
 	"github.com/Crocmagnon/learn-go-with-tests/acceptance_tests/adapters/httpserver"
 	"github.com/Crocmagnon/learn-go-with-tests/acceptance_tests/specifications"
@@ -14,16 +13,16 @@ func TestGreeterServer(t *testing.T) {
 	if testing.Short() {
 		t.Skip()
 	}
+	t.Parallel()
 
 	var (
 		port           = "8080"
 		dockerfilePath = "./acceptance_tests/Dockerfile"
-		baseURL        = fmt.Sprintf("http://127.0.0.1:%s", port)
 		client         = http.Client{Timeout: 1 * time.Second}
-		driver         = httpserver.Driver{BaseURL: baseURL, Client: &client}
+		endpoint       = adapters.StartDockerServer(t, dockerfilePath, port, "httpserver", "http")
+		driver         = httpserver.Driver{BaseURL: endpoint, Client: &client}
 	)
 
-	adapters.StartDockerServer(t, dockerfilePath, port, "httpserver")
 	specifications.GreetSpecification(t, driver)
 	specifications.CurseSpecification(t, driver)
 }
